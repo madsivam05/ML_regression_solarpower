@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solar Power Predictor</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .card {
+    background: rgba(255,255,255,0.97);
+    border-radius: 16px;
+    padding: 36px;
+    width: 100%; max-width: 440px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  h1 { font-size: 1.5rem; color: #1a2b3c; margin-bottom: 4px; }
+  .sub { color: #6b7a8a; font-size: 0.9rem; margin-bottom: 24px; }
+  label { display: block; font-size: 0.85rem; font-weight: 600; color: #34495e; margin: 14px 0 5px; }
+  input {
+    width: 100%; padding: 10px 12px;
+    border: 1.5px solid #d5dde5; border-radius: 8px;
+    font-size: 1rem;
+  }
+  input:focus { outline: none; border-color: #f39c12; }
+  button {
+    width: 100%; margin-top: 22px; padding: 13px;
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+    color: #fff; font-size: 1rem; font-weight: 700;
+    border: none; border-radius: 8px; cursor: pointer;
+  }
+  button:hover { filter: brightness(1.08); }
+  .result {
+    margin-top: 22px; padding: 18px; border-radius: 10px;
+    background: #eafaf1; border: 1.5px solid #27ae60;
+    text-align: center;
+  }
+  .result .val { font-size: 1.8rem; font-weight: 800; color: #1e8449; }
+  .result .lbl { font-size: 0.8rem; color: #566573; text-transform: uppercase; letter-spacing: 1px; }
+  .error { background: #fdecea; border-color: #e74c3c; color: #c0392b; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>☀️ Solar Power Predictor</h1>
+    <p class="sub">Linear regression model &mdash; running on localhost</p>
+    <form method="POST" action="/">
+      <label for="temperature">Temperature (&deg;C)</label>
+      <input type="number" step="any" name="temperature" id="temperature" value="{{ values.temperature }}" required placeholder="e.g. 32">
+
+      <label for="humidity">Humidity (%)</label>
+      <input type="number" step="any" name="humidity" id="humidity" value="{{ values.humidity }}" required placeholder="e.g. 45">
+
+      <label for="solar_irradiance">Solar Irradiance (W/m&sup2;)</label>
+      <input type="number" step="any" name="solar_irradiance" id="solar_irradiance" value="{{ values.solar_irradiance }}" required placeholder="e.g. 800">
+
+      <label for="wind_speed">Wind Speed (m/s)</label>
+      <input type="number" step="any" name="wind_speed" id="wind_speed" value="{{ values.wind_speed }}" required placeholder="e.g. 5">
+
+      <button type="submit">Predict Output</button>
+    </form>
+
+    {% if prediction is not none %}
+      {% if prediction == "error" %}
+        <div class="result error">Please enter valid numbers in all fields.</div>
+      {% else %}
+        <div class="result">
+          <div class="lbl">Predicted Solar Power Output</div>
+          <div class="val">{{ prediction }} kW</div>
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</body>
+</html>
